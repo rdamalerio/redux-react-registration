@@ -39,7 +39,7 @@ mongoose.connection.on('connected', () => {
   })
   
   const run = async () => {
-    await mongoose.connect('mongodb://localhost:27017/user', {
+      await mongoose.connect('mongodb://localhost:27017/user', {
       autoReconnect: true,
       reconnectTries: 1000000,
       reconnectInterval: 3000
