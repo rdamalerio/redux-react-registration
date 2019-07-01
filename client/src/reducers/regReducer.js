@@ -2,7 +2,7 @@ import uuid from 'uuid';
 import {REGISTER_USER,REGISTER_SUCCESS,REGISTER_FAIL} from '../actions/types';
 
 const initialState = {
-    user:[{id:uuid(),lname:"fdsafdsa",phone:'dsafdsa',country:'dsafdsa',bday:'fdsafdsa',email:'abc',pass:'abc',question:'jdlsjalf',ans:'ldsjalf'}]
+    user:[{lname:"",phone:'',country:'',bday:'',email:'',pass:'',question:'',ans:''}]
 }
 
 export default function(state = initialState, action) {
@@ -12,6 +12,13 @@ export default function(state = initialState, action) {
           ...state,
           isLoading: true
         };
+      case REGISTER_SUCCESS:
+          return {
+            ...state,
+            ...action.payload,
+            isRegister: true,
+            error:false
+        };  
       
       default:
         return state;
