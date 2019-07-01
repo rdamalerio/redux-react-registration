@@ -1,16 +1,14 @@
 import React, { Component } from 'react'
-import { Button,Modal,
-    ModalHeader,
-    ModalBody, Form, FormGroup, Label, Input,Container } from 'reactstrap';
+import { Button, Form, FormGroup, Label, Input,Container } from 'reactstrap';
 import ReactPhoneInput from 'react-phone-input-2'
-import { CountryDropdown, RegionDropdown, CountryRegionData } from 'react-country-region-selector';
+import { CountryDropdown} from 'react-country-region-selector';
 
 import 'react-phone-input-2/dist/style.css'
 
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-class SingupModal extends Component {
+class Singup extends Component {
     state = {
         modal: false,
         fname: '',
@@ -24,11 +22,6 @@ class SingupModal extends Component {
         ans: ''
     };
 
-    toggle = () => {
-        this.setState({
-          modal: !this.state.modal
-        });
-    };
 
     onChange = e => {
         this.setState({ [e.target.name]: e.target.value });
@@ -52,9 +45,6 @@ class SingupModal extends Component {
         return (
             <div>
                 <Container>
-                <Modal isOpen={this.state.modal} toggle={this.toggle}>
-                <ModalHeader toggle={this.toggle}>Register</ModalHeader>
-                <ModalBody>
 
                     <h2>Signup Form</h2><br />
                     <Form>
@@ -123,12 +113,11 @@ class SingupModal extends Component {
 
                         <Button>Submit</Button>
                     </Form>
-                </ModalBody>
-                </Modal>
+                    <br />
                    </Container>  
             </div>
         ) 
     }
 }
 
-export default SingupModal;
+export default Singup;

@@ -39,7 +39,7 @@ import {
                 <Collapse isOpen={this.state.isOpen} navbar>
                   <Nav className="ml-auto" navbar>
                     <NavItem>
-                      <NavLink onClick={this.openLoginModal} href='#'>Register</NavLink>               
+                      <NavLink href='/signup'>Register</NavLink>               
                     </NavItem>
                   </Nav>
                 </Collapse>
