@@ -17,12 +17,14 @@ function App() {
       <div className="App">
         
         <AppNavbar />
-        <Router>
-            <Switch>
-                  <Route exact path='/' component={Login} />
-                  <Route path='/signup' component={Singup} />
-            </Switch>
-        </Router>
+        <BrowserRouter>
+          <Router>
+              <Switch>
+                    <Route exact path='/' component={Login} />
+                    <Route path='/signup' component={Singup} />
+              </Switch>
+          </Router>
+        </BrowserRouter>
       </div>
       </Provider>       
   );

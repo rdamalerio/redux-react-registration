@@ -34,8 +34,8 @@ export const register = ({ fname,lname,phone,country,bday,email,pass,question,an
       type: REGISTER_FAIL
     });
   });
+ 
 
-  
   
 };
 

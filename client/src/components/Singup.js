@@ -1,4 +1,5 @@
 import React, { Component } from 'react'
+import {Redirect} from 'react-router-dom';
 import { Button, Form, FormGroup, Label, Input,Container,Alert } from 'reactstrap';
 import ReactPhoneInput from 'react-phone-input-2'
 import { CountryDropdown} from 'react-country-region-selector';
@@ -23,16 +24,20 @@ class Singup extends Component {
         pass: '',
         question: '',
         ans: '',
-        msg: null
+        msg: null,
+        error: null
     };
 
     static propTypes = {
+        isAuthenticated: PropTypes.bool,
+        isRegister: PropTypes.bool,
         error: PropTypes.object.isRequired,
-        clearErrors: PropTypes.func.isRequired,
-        register:PropTypes.func.isRequired
+        register: PropTypes.func.isRequired,
+        clearErrors: PropTypes.func.isRequired
     };
 
     componentDidUpdate(prevProps) {
+        console.log(prevProps);
         const { error } = this.props;
         if (error !== prevProps.error) {
           // Check for register error
@@ -40,10 +45,16 @@ class Singup extends Component {
             this.setState({ msg: error.msg.msg });
           } else {
             this.setState({ msg: null });
-          }
+          }         
         }
-        
+          
       }
+    
+    toggle = () => {
+        // Clear errors
+        this.props.clearErrors();       
+    };
+
     
     onChange = e => {
         this.setState({ [e.target.name]: e.target.value });
@@ -61,20 +72,26 @@ class Singup extends Component {
 
 
     onSubmit = e => {
-    e.preventDefault();
+        e.preventDefault();
 
-    const { fname,lname,phone,country,bday,email,pass,question,ans} = this.state;
+        const { fname,lname,phone,country,bday,email,pass,question,ans} = this.state;
 
-    // Create user object
-    const newUser = {
-        fname,lname,phone,country,bday,email,pass,question,ans
+        // Create user object
+        const newUser = {
+            fname,lname,phone,country,bday,email,pass,question,ans
+        };
+        // Attempt to register
+        this.props.register(newUser);  
     };
-    // Attempt to register
-    this.props.register(newUser);
 
-    };
-
+    
     render() {
+        
+        if(this.props.isRegister){
+           return <Redirect to='/'/>;
+        }
+        
+
         return (
             <div>
                 <Container>
@@ -140,7 +157,7 @@ class Singup extends Component {
                         <FormGroup>
                         <Label for="question">Question</Label>
                         <Input type="select" name="question" id="question" onChange={this.onChange}>
-                            <option value="What is your favorate fet">What is your favorate fet</option>
+                            <option value="What is your favorate fet">What is your favorate pet</option>
                             <option value="Who is your favorate teacher in grade school">Who is your favorate teacher in grade school</option>
                             <option value="What is your favorate sports">What is your favorate sports</option>
                             <option value="Who is your childhood friend">Who is your childhood friend</option>
@@ -161,7 +178,8 @@ class Singup extends Component {
     }
 }
 
-const mapStateToProps = state => ({
+  const mapStateToProps = state => ({
+    isRegister: state.reg.isRegister,
     error: state.error
   });
 

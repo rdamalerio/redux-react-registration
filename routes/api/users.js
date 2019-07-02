@@ -1,5 +1,9 @@
  const express = require('express');
  const router = express.Router();
+ const bcrypt = require('bcryptjs');
+ const config = require('config');
+ const jwt = require('jsonwebtoken');
+ const nodemailer = require("nodemailer");
 
  //User Model
  const User = require('../../models/user')
@@ -15,10 +19,84 @@
         country: req.body.country,
         bday: req.body.bday,
         email: req.body.email,
+        pass: req.body.pass,
         question: req.body.question,
         ans: req.body.ans
     });
-    newUser.save().then(user => res.json(user))
+
+    const { fname,lname,phone,country,bday, email, pass,question,ans } = req.body;
+
+    // Simple validation
+    if(!fname || !lname  || !email || !pass) {
+        return res.status(400).json({ msg: 'Please enter all fields' });
+    }
+
+      // Check for existing user
+  User.findOne({ email })
+  .then(user => {
+    if(user) return res.status(400).json({ msg: 'User already exists' });
+
+    const newUser = new User({
+        fname,lname,phone,country,bday, email, pass,question,ans
+    });
+
+    // Create salt & hash
+    bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(newUser.pass, salt, (err, hash) => {
+            if(err) throw err;
+            newUser.pass = hash;
+            newUser.save()
+            .then(user => {
+                jwt.sign(
+                { id: user.id },
+                config.get('jwtSecret'),
+                { expiresIn: 3600 },
+                (err, token) => {
+                    if(err) throw err;
+                    res.json({
+                    token,
+                    user: {
+                        id: user.id,
+                        name: user.name,
+                        email: user.email
+                    }
+                    });
+                }
+                )
+            });
+        })
+        })
+    })
+
+
+    // create reusable transporter object using the default SMTP transport
+    let transporter = nodemailer.createTransport({
+        host: "smtp.ethereal.email",
+        port: 587,     
+        auth: {
+            user: 'forrest.koch30@ethereal.email',
+            pass: '7snWCuzr3gcCuktN6t'
+        }
+    });
+
+    // send mail with defined transport object
+  let info = transporter.sendMail({
+    from: '"Fred Foo 👻" <rdamalerio@ched.gov.ph>', // sender address
+    to: "damalerioroel@gmail.com", // list of receivers
+    subject: "Hello ✔", // Subject line
+    text: "Hello world?", // plain text body
+    html: "<b>Hello world?</b>" // html body
+  });
+
+  console.log("Message sent: %s", info.messageId);
+  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+
+  // Preview only available when sending through an Ethereal account
+  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+
+
+    //newUser.save().then(user => res.json(user))
  });
 
  
