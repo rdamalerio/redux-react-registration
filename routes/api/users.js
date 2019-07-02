@@ -81,20 +81,11 @@
 
     // send mail with defined transport object
   let info = transporter.sendMail({
-    from: '"Fred Foo 👻" <rdamalerio@ched.gov.ph>', // sender address
-    to: "damalerioroel@gmail.com", // list of receivers
-    subject: "Hello ✔", // Subject line
-    text: "Hello world?", // plain text body
-    html: "<b>Hello world?</b>" // html body
+    from: 'Roel G Damalerio', // sender address
+    to: this.email, // list of receivers
+    subject: "REGISTRATION CONFIRMATION", // Subject line
+    text: "Thank you for Registering, Have a good day." // plain text body
   });
-
-  console.log("Message sent: %s", info.messageId);
-  // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
-
-  // Preview only available when sending through an Ethereal account
-  console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
-  // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
-
 
     //newUser.save().then(user => res.json(user))
  });

@@ -3,11 +3,11 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const config = require('config');
 const jwt = require('jsonwebtoken');
-const auth = require('../../middleware/auth');
+//const auth = require('../../middleware/auth');
 
 
-// User Model
-const User = require('../../models/User');
+ //User Model
+ const User = require('../../models/user')
 
 // @route   POST api/auth
 // @desc    Auth user
@@ -26,7 +26,7 @@ router.post('/', (req, res) => {
       if(!user) return res.status(400).json({ msg: 'User Does not exist' });
 
       // Validate password
-      bcrypt.compare(password, user.password)
+      bcrypt.compare(password, user.pass)
         .then(isMatch => {
           if(!isMatch) return res.status(400).json({ msg: 'Invalid credentials' });
 
@@ -48,15 +48,6 @@ router.post('/', (req, res) => {
           )
         })
     })
-});
-
-// @route   GET api/auth/user
-// @desc    Get user data
-// @access  Private
-router.get('/user', auth, (req, res) => {
-  User.findById(req.user.id)
-    .select('-password')
-    .then(user => res.json(user));
 });
 
 module.exports = router;
