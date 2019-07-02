@@ -9,13 +9,6 @@ const app = express();
 // Bodyparser Middleware
 app.use(bodyParser.json());
 
-//DB Config
-//const db =require('./config/keys').mongoURI;
-
-//Connect to Mongo
-//mongoose.connect(db)
-//.then(() => console.log('MongoDB Connected...'))
-//.catch(err => console.log(err));
 
 //Mongoose using async/await
 mongoose.connection.on('connected', () => {
@@ -40,6 +33,7 @@ mongoose.connection.on('connected', () => {
   
   const run = async () => {
       await mongoose.connect('mongodb://localhost:27017/user', {
+      useNewUrlParser:true,
       autoReconnect: true,
       reconnectTries: 1000000,
       reconnectInterval: 3000
