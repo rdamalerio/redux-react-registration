@@ -37,7 +37,6 @@ class Singup extends Component {
     };
 
     componentDidUpdate(prevProps) {
-        console.log(prevProps);
         const { error } = this.props;
         if (error !== prevProps.error) {
           // Check for register error
