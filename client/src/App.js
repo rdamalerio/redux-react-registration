@@ -1,5 +1,5 @@
 import React,{ Component } from 'react';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route} from 'react-router-dom';
 import AppNavbar from './components/AppNavbar';
 import Singup from './components/Singup';
 import Login from './components/Login';
@@ -17,14 +17,12 @@ function App() {
       <div className="App">
         
         <AppNavbar />
-        <BrowserRouter>
           <Router>
               <Switch>
                     <Route exact path='/' component={Login} />
                     <Route path='/signup' component={Singup} />
               </Switch>
           </Router>
-        </BrowserRouter>
       </div>
       </Provider>       
   );
