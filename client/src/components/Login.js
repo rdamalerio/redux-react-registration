@@ -74,7 +74,7 @@ class Login extends Component {
                     ) : null}
 
                     <h2>Login</h2><br />
-                    <Form>                    
+                    <Form onSubmit={this.onSubmit}>                    
                         <FormGroup>
                             <Label for="email">Email</Label>
                             <Input
@@ -112,11 +112,12 @@ class Login extends Component {
 const mapStateToProps = state => ({
     isRegister: state.reg.isRegister,
     payload: state.reg.payload,
-    error: state.error
+    error: state.error,
+    isAuthenticated: state.reg.isAuthenticated,
   });
 
 
   export default connect(
     mapStateToProps,
-    { clearErrors }
+    {login, clearErrors }
   )(Login);
