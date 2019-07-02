@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 
-import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { register } from '../actions/authAction';
+import PropTypes from 'prop-types';
+import { login } from '../actions/authAction';
 import { clearErrors } from '../actions/errorActions';
 
 import {
@@ -18,14 +18,51 @@ import {
 
 class Login extends Component {
 
+    state = {
+        modal: false,
+        email: '',
+        password: '',
+        msg: null
+    };
+
     static propTypes = {
         isAuthenticated: PropTypes.bool,
         isRegister: PropTypes.bool,
         error: PropTypes.object.isRequired,
-        register: PropTypes.func.isRequired,
+        login: PropTypes.func.isRequired,
         clearErrors: PropTypes.func.isRequired
     };
 
+    componentDidUpdate(prevProps) {
+        const { error, isAuthenticated } = this.props;
+        if (error !== prevProps.error) {
+          // Check for register error
+          if (error.id === 'LOGIN_FAIL') {
+            this.setState({ msg: error.msg.msg });
+          } else {
+            this.setState({ msg: null });
+          }
+        }
+        
+      }
+
+    onChange = e => {
+    this.setState({ [e.target.name]: e.target.value });
+    };
+      
+    onSubmit = e => {
+        e.preventDefault();
+    
+        const { email, password } = this.state;
+    
+        const user = {
+          email,
+          password
+        };
+    
+        // Attempt to login
+        this.props.login(user);
+    };
 
     render() {
 
@@ -44,11 +81,21 @@ class Login extends Component {
                                 type="email"
                                 name="email"
                                 id="email"
+                                placeholder='Email'
+                                className='mb-3'
+                                onChange={this.onChange}
                             />
                         </FormGroup>
                         <FormGroup>
                         <Label for="pass">Password</Label>
-                        <Input type="password" name="pass" id="pass"/>
+                        <Input
+                            type='password'
+                            name='password'
+                            id='password'
+                            placeholder='Password'
+                            className='mb-3'
+                            onChange={this.onChange}
+                            />
                         </FormGroup>
                        
 
@@ -71,5 +118,5 @@ const mapStateToProps = state => ({
 
   export default connect(
     mapStateToProps,
-    { register, clearErrors }
+    { clearErrors }
   )(Login);
