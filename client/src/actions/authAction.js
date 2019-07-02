@@ -3,7 +3,9 @@ import { returnErrors } from './errorActions';
 
 import {
   REGISTER_SUCCESS,
-  REGISTER_FAIL
+  REGISTER_FAIL,
+  LOGIN_SUCCESS,
+  LOGIN_FAIL,
 } from './types';
 
 // Register User
