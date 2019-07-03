@@ -5,6 +5,7 @@
  const jwt = require('jsonwebtoken');
  const nodemailer = require("nodemailer");
 
+
  //User Model
  const User = require('../../models/user')
 
@@ -68,27 +69,69 @@
         })
     })
 
+    nodmailer(email).catch(console.error);
 
+ });
+
+ // async..await is not allowed in global scope, must use a wrapper
+ // U use only nodemailer library for firing fake email
+async function nodmailer(email){
+
+    // Generate test SMTP service account from ethereal.email
+    // Only needed if you don't have a real mail account for testing
+    let testAccount = await nodemailer.createTestAccount();
+  
     // create reusable transporter object using the default SMTP transport
     let transporter = nodemailer.createTransport({
-        host: "smtp.ethereal.email",
-        port: 587,     
-        auth: {
-            user: 'forrest.koch30@ethereal.email',
-            pass: '7snWCuzr3gcCuktN6t'
+      host: "smtp.ethereal.email",
+      port: 587,
+      secure: false, // true for 465, false for other ports
+      auth: {
+        user: testAccount.user, // generated ethereal user
+        pass: testAccount.pass // generated ethereal password
+      }
+    });
+  
+    // send mail with defined transport object
+    let info = await transporter.sendMail({
+      from: 'damalerioroel@gmail.com', // sender address
+      to: email, // list of receivers
+      subject: "Hello ✔", // Subject line
+      text: "Thank you for registering my sample app", // plain text body
+      html: "<b>Thank you for registering my sample app</b>" // html body
+    });
+  
+    console.log("Message sent: %s", info.messageId);
+    // Message sent: <b658f8ca-6296-ccf4-8306-87d57a0b4321@example.com>
+  
+    // Preview only available when sending through an Ethereal account
+    console.log("Preview URL: %s", nodemailer.getTestMessageUrl(info));
+    // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
+  }
+
+ // @route POST api/users/update
+ // @desc UPDATE USER
+ // @access Private
+ router.post('/update',(req,res) =>{
+
+    const { _id,fname,lname,phone,country,bday, email,question,ans } = req.body;
+
+    // Simple validation
+    if(!fname || !lname  || !email) {
+        return res.status(400).json({ msg: 'Please enter all fields' });
+    }
+
+    // Check for existing and update
+    User.findOneAndUpdate({ "_id": _id }, { "$set": { "fname": fname, "lname": lname, "phone": phone, "country": country,"bday":bday,"question":question,"ans":ans}}).exec(function(err, user){
+        if(err) {
+            console.log(err);
+            res.status(500).send(err);
+        } else {
+            res.status(200).send(ser);
         }
     });
 
-    // send mail with defined transport object
-    let info = transporter.sendMail({
-        from: 'Roel G Damalerio', // sender address
-        to: email, // list of receivers
-        subject: "REGISTRATION CONFIRMATION", // Subject line
-        text: "Thank you for Registering, Have a good day." // plain text body
-    });
-
-    //newUser.save().then(user => res.json(user))
- });
+ }); 
 
  
  // @route DELETE api/users/:id
@@ -100,4 +143,5 @@
         .catch(err => res.status(404).json({ success : false}));
  });
 
+ 
 module.exports = router;

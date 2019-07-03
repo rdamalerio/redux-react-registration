@@ -4,6 +4,7 @@ import AppNavbar from './components/AppNavbar';
 import Singup from './components/Singup';
 import Login from './components/Login';
 import Profile from './components/Profile';
+import Update from './components/Update';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './App.css';
@@ -29,6 +30,7 @@ class App extends Component {
                       <Route exact path='/' component={Login} />
                       <Route path='/signup' component={Singup} />
                       <Route path='/profile' component={Profile} />
+                      <Route path='/update' component={Update} />
                 </Switch>
             </Router>
         </div>

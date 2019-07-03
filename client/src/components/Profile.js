@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import {Redirect} from 'react-router-dom';
 import {
-    Container
+    Container,
+    Button
   } from 'reactstrap';
 
 import { connect } from 'react-redux';
@@ -9,6 +9,10 @@ import { clearErrors } from '../actions/errorActions';
 
 
 class Profile extends Component {
+
+  updateProfile = () =>{
+    this.props.history.push('/update',this.props.profile);
+  }
 
     render() {
         if(!this.props.isAuthenticated){       
@@ -30,6 +34,7 @@ class Profile extends Component {
                     <p>Email: {(this.props.profile) ? this.props.profile.email : null}</p>   
                     <p>Question: {(this.props.profile) ? this.props.profile.question : null}</p>   
                     <p>Answer:{(this.props.profile) ? this.props.profile.ans : null}</p>   
+                    <Button color="primary" onClick={this.updateProfile}>Update Profile</Button>{' '}
                 </Container>
                 
             </div>

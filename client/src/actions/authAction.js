@@ -10,6 +10,8 @@ import {
   LOGOUT_SUCCESS,
   LOGIN_FAIL,
   AUTH_ERROR,
+  UPDATE_SUCCESS,
+  UPDATE_FAIL
 } from './types';
 
 // Check token & load user
@@ -54,12 +56,53 @@ export const register = ({ fname,lname,phone,country,bday,email,pass,question,an
     })   
   )
   .catch(err => {
-    dispatch(
-      returnErrors(err.response.data, err.response.status, 'REGISTER_FAIL')
-    );
+    try{
+      dispatch(
+        returnErrors(err.response.data, err.response.status, 'REGISTER_FAIL')
+      );
+      dispatch({
+        type: REGISTER_FAIL
+      });
+    }catch(e){
+
+    }
+  });
+ 
+
+  
+};
+
+// Update User
+export const update = ({ fname,lname,phone,country,bday,email,question,ans }) => dispatch => {
+  // Headers
+  const config = {
+    headers: {
+      'Content-Type': 'application/json'
+    }
+  };
+
+  // Request body
+  const body = JSON.stringify({ fname,lname,phone,country,bday,email,question,ans });
+  
+  axios
+  .post('/api/update', body, config)
+  .then(res =>
     dispatch({
-      type: REGISTER_FAIL
-    });
+      type: UPDATE_SUCCESS,
+      payload: res.data
+    })   
+  )
+  .catch(err => {
+    try{
+      dispatch(
+        returnErrors(err.response.data, err.response.status, 'UPDATE_FAIL')
+      );
+      dispatch({
+        type: UPDATE_FAIL
+      });
+    }catch(e){
+      console.log(e);
+    }
   });
  
 

@@ -7,21 +7,20 @@ import 'react-phone-input-2/dist/style.css'
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { register } from '../actions/authAction';
+import { update } from '../actions/authAction';
 import { clearErrors } from '../actions/errorActions';
 
 
-class Singup extends Component {
+class Update extends Component {
     state = {
-        fname: '',
-        lname: '',
-        phone: '',
-        country: '',
-        bday: '',
-        email: '',
-        pass: '',
-        question: '',
-        ans: '',
+        fname: this.props.location.state.fname,
+        lname: this.props.location.state.lname,
+        phone: this.props.location.state.phone,
+        country: this.props.location.state.country,
+        bday: this.props.location.state.bday,
+        email: this.props.location.state.email,
+        question: this.props.location.state.question,
+        ans: this.props.location.state.ans,
         msg: null,
         error: null
     };
@@ -29,7 +28,7 @@ class Singup extends Component {
     static propTypes = {
         isAuthenticated: PropTypes.bool,
         error: PropTypes.object.isRequired,
-        register: PropTypes.func.isRequired,
+        update: PropTypes.func.isRequired,
         clearErrors: PropTypes.func.isRequired
     };
 
@@ -37,17 +36,13 @@ class Singup extends Component {
         const { error } = this.props;
         if (error !== prevProps.error) {
           // Check for register error
-          if (error.id === 'REGISTER_FAIL') {
+          if (error.id === 'UPDATE_FAIL') {
             this.setState({ msg: error.msg.msg });
           } else {
             this.setState({ msg: null });
           }         
         }
-
-        if(this.props.isAuthenticated || this.props.isRegister){       
-            this.props.history.push("/profile");
-        }
-          
+        
     }
 
     
@@ -76,12 +71,22 @@ class Singup extends Component {
             fname,lname,phone,country,bday,email,pass,question,ans
         };
         // Attempt to register
-        this.props.register(newUser);
+        this.props.update(newUser);
    
     };
 
     
     render() {
+
+        if(!this.props.isAuthenticated){       
+            try{
+              this.props.history.push("/");  
+            }catch(e){
+              console.log(e);
+            }
+            
+        }
+        console.log(this.props.location.state);
         
         return (
             <div>
@@ -89,20 +94,20 @@ class Singup extends Component {
                     {this.state.msg ? (
                     <Alert color='danger'>{this.state.msg}</Alert>
                     ) : null}
-                    <h2>Signup Form</h2><br />
+                    <h2>Update profile</h2><br />
                     <Form onSubmit={this.onSubmit}>
                         <FormGroup>
                         <Label for="fname">Firstname</Label>
-                        <Input type="input" name="fname" id="fname" placeholder="First name" onChange={this.onChange}/>
+                        <Input type="input" name="fname" id="fname" placeholder="First name" value={this.state.fname || this.props.location.state.fname} onChange={this.onChange}/>
                         </FormGroup>
                         <FormGroup>
                         <Label for="lname">Lastname</Label>
-                        <Input type="input" name="lname" id="lname" placeholder="Last name" onChange={this.onChange}/>
+                        <Input type="input" name="lname" id="lname" value={this.state.lname || this.props.location.state.lname} placeholder="Last name" onChange={this.onChange}/>
                         </FormGroup>
                         <FormGroup>
                         <Label for="phone">Phone</Label>
                         <ReactPhoneInput
-                            value={this.state.phone}
+                            value={this.state.phone || this.props.location.state.phone}
                             onChange={this.phoneOnChange}
                             inputExtraProps={{
                                 name: 'phone',
@@ -116,7 +121,7 @@ class Singup extends Component {
                             <CountryDropdown
                                 name='country'
                                 id='country'
-                                value={this.state.country}
+                                value={this.state.country || this.props.location.state.country}
                                 onChange={this.countryOnChange}
                             />
                         </FormGroup>
@@ -126,6 +131,7 @@ class Singup extends Component {
                                 type="date"
                                 name="bday"
                                 id="bday"
+                                value={this.state.bday || this.props.location.state.bday}
                                 placeholder="Birthdate"
                                 onChange={this.onChange}
                             />
@@ -136,18 +142,15 @@ class Singup extends Component {
                                 type="email"
                                 name="email"
                                 id="email"
+                                value={this.state.email || this.props.location.state.email}
                                 placeholder="Valid Email is required"
                                 onChange ={this.onChange}
                             />
                         </FormGroup>
-                        <FormGroup>
-                        <Label for="pass">Password</Label>
-                        <Input type="password" name="pass" id="pass" placeholder="Password" onChange={this.onChange}/>
-                        </FormGroup>
                         <br />
                         <FormGroup>
                         <Label for="question">Question</Label>
-                        <Input type="select" name="question" id="question" onChange={this.onChange}>
+                        <Input type="select" name="question" value={this.state.question || this.props.location.state.question} id="question" onChange={this.onChange}>
                             <option value="What is your favorate fet">What is your favorate pet</option>
                             <option value="Who is your favorate teacher in grade school">Who is your favorate teacher in grade school</option>
                             <option value="What is your favorate sports">What is your favorate sports</option>
@@ -157,10 +160,10 @@ class Singup extends Component {
                         </FormGroup>
                         <FormGroup>
                         <Label for="ans">Answer</Label>
-                        <Input type="input" name="ans" id="ans" placeholder="Answer" onChange={this.onChange}/>
+                        <Input type="input" name="ans" id="ans" value={this.state.ans || this.props.location.state.ans} placeholder="Answer" onChange={this.onChange}/>
                         </FormGroup>
 
-                        <Button>Submit</Button>
+                        <Button>Save Update</Button>
                     </Form>
                     <br />
                    </Container>  
@@ -177,5 +180,5 @@ class Singup extends Component {
 
   export default connect(
     mapStateToProps,
-    { register, clearErrors }
-  )(Singup);
+    { update, clearErrors }
+  )(Update);

@@ -33,7 +33,7 @@ class Login extends Component {
     };
 
     componentDidUpdate(prevProps) {
-        const { error, isAuthenticated } = this.props;
+        const { error } = this.props;
         if (error !== prevProps.error) {
           // Check for register error
           if (error.id === 'LOGIN_FAIL') {
@@ -77,7 +77,15 @@ class Login extends Component {
 
     render() {
 
-    
+      if(this.props.isAuthenticated){       
+        try{
+          this.props.history.push("/profile");  
+        }catch(e){
+          console.log(e);
+        }
+        
+      }
+
         return (
             <div>
                 <Container>
@@ -85,7 +93,7 @@ class Login extends Component {
                     <Alert color='danger'>{this.state.msg}</Alert>
                     ) : null}
                     {this.props.isRegister ? (
-                    <Alert color='success'>Register account success, check your email in {this.props.payload.user.email} to activate your account </Alert>
+                    <Alert color='success'>Register account success, check your email in {this.props.user.email} to activate your account </Alert>
                     ) : null}
                     <h2>Login</h2><br />
                     <Form onSubmit={this.onSubmit}>                    
@@ -124,7 +132,7 @@ class Login extends Component {
 
 
 const mapStateToProps = state => ({
-    payload: state.reg.user,
+    user: state.reg.user,
     error: state.error,
     isAuthenticated: state.reg.isAuthenticated,
     isRegister: state.reg.isRegister,
