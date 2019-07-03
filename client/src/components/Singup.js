@@ -1,5 +1,4 @@
 import React, { Component } from 'react'
-import {Redirect} from 'react-router-dom';
 import { Button, Form, FormGroup, Label, Input,Container,Alert } from 'reactstrap';
 import ReactPhoneInput from 'react-phone-input-2'
 import { CountryDropdown} from 'react-country-region-selector';
@@ -30,7 +29,6 @@ class Singup extends Component {
 
     static propTypes = {
         isAuthenticated: PropTypes.bool,
-        isRegister: PropTypes.bool,
         error: PropTypes.object.isRequired,
         register: PropTypes.func.isRequired,
         clearErrors: PropTypes.func.isRequired
@@ -46,13 +44,12 @@ class Singup extends Component {
             this.setState({ msg: null });
           }         
         }
+
+        if(this.props.isAuthenticated || this.props.isRegister){       
+            this.props.history.push("/profile");
+        }
           
-      }
-    
-    toggle = () => {
-        // Clear errors
-        this.props.clearErrors();       
-    };
+    }
 
     
     onChange = e => {
@@ -80,17 +77,13 @@ class Singup extends Component {
             fname,lname,phone,country,bday,email,pass,question,ans
         };
         // Attempt to register
-        this.props.register(newUser);  
+        this.props.register(newUser);
+   
     };
 
     
     render() {
         
-        if(this.props.isRegister){
-           return <Redirect to='/'/>;
-        }
-        
-
         return (
             <div>
                 <Container>
@@ -179,6 +172,7 @@ class Singup extends Component {
 
   const mapStateToProps = state => ({
     isRegister: state.reg.isRegister,
+    isAuthenticated: state.reg.isAuthenticated,
     error: state.error
   });
 

@@ -27,7 +27,6 @@ class Login extends Component {
 
     static propTypes = {
         isAuthenticated: PropTypes.bool,
-        isRegister: PropTypes.bool,
         error: PropTypes.object.isRequired,
         login: PropTypes.func.isRequired,
         clearErrors: PropTypes.func.isRequired
@@ -43,8 +42,17 @@ class Login extends Component {
             this.setState({ msg: null });
           }
         }
+
+        if(this.props.isAuthenticated){       
+          try{
+            this.props.history.push("/profile");  
+          }catch(e){
+            console.log(e);
+          }
+          
+        }
         
-      }
+    }
 
     onChange = e => {
     this.setState({ [e.target.name]: e.target.value });
@@ -52,7 +60,10 @@ class Login extends Component {
       
     onSubmit = e => {
         e.preventDefault();
-    
+
+        // Clear errors
+        this.props.clearErrors();
+
         const { email, password } = this.state;
     
         const user = {
@@ -66,13 +77,16 @@ class Login extends Component {
 
     render() {
 
+    
         return (
             <div>
                 <Container>
+                    {this.state.msg ? (
+                    <Alert color='danger'>{this.state.msg}</Alert>
+                    ) : null}
                     {this.props.isRegister ? (
                     <Alert color='success'>Register account success, check your email in {this.props.payload.user.email} to activate your account </Alert>
                     ) : null}
-
                     <h2>Login</h2><br />
                     <Form onSubmit={this.onSubmit}>                    
                         <FormGroup>
@@ -110,11 +124,11 @@ class Login extends Component {
 
 
 const mapStateToProps = state => ({
-    isRegister: state.reg.isRegister,
-    payload: state.reg.payload,
+    payload: state.reg.user,
     error: state.error,
     isAuthenticated: state.reg.isAuthenticated,
-  });
+    isRegister: state.reg.isRegister,
+});
 
 
   export default connect(

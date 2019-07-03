@@ -3,7 +3,7 @@ const router = express.Router();
 const bcrypt = require('bcryptjs');
 const config = require('config');
 const jwt = require('jsonwebtoken');
-//const auth = require('../../middleware/auth');
+const auth = require('../../middleware/auth');
 
 
  //User Model
@@ -41,7 +41,14 @@ router.post('/', (req, res) => {
                 user: {
                   id: user.id,
                   name: user.name,
-                  email: user.email
+                  email: user.email,
+                  fname: user.fname,
+                  lname: user.lname,
+                  phone: user.phone,
+                  country: user.country,
+                  bday: user.bday,
+                  question: user.question,
+                  ans: user.ans
                 }
               });
             }
@@ -49,5 +56,15 @@ router.post('/', (req, res) => {
         })
     })
 });
+
+// @route   GET api/auth/user
+// @desc    Get user data
+// @access  Private
+router.get('/user', auth, (req, res) => {
+  User.findById(req.user.id)
+    .select('-password')
+    .then(user => res.json(user));
+});
+
 
 module.exports = router;

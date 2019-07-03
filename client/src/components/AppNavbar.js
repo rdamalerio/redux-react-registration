@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component} from 'react';
 import {
     Collapse,
     Navbar,
@@ -7,29 +7,26 @@ import {
     Nav,
     NavItem,
     NavLink,
-    UncontrolledDropdown,
-    DropdownToggle,
-    DropdownMenu,
-    DropdownItem,
     Container
   } from 'reactstrap';
+
+  import { connect } from 'react-redux';
+  import PropTypes from 'prop-types';
+  import { logout } from '../actions/authAction';
 
   class AppNavbar extends Component{
       state = {
           isOpen:false
       }
 
-      toogle = () => {
-          this.setState({
-            isOpen: !this.state.isOpen
-          });
-      }
-
-      openLoginModal = () => {
-        this.refs.SignupModal.open();
+      static propTypes ={
+        isAuthenticated: PropTypes.bool,
+        error: PropTypes.object.isRequired,
+        logout: PropTypes.func.isRequired
       }
 
       render(){
+       
         return(
           <div>
             <Navbar color='dark' dark expand='sm' className='mb-5'>
@@ -39,7 +36,10 @@ import {
                 <Collapse isOpen={this.state.isOpen} navbar>
                   <Nav className="ml-auto" navbar>
                     <NavItem>
-                      <NavLink href='/signup'>Register</NavLink>               
+                        {this.props.isAuthenticated ? (
+                         <NavLink onClick={this.props.logout} href='/'>Logout</NavLink>
+                        ) : <NavLink href='/signup'>Signup</NavLink>}
+                      
                     </NavItem>
                   </Nav>
                 </Collapse>
@@ -50,4 +50,13 @@ import {
       }
   }
 
-  export default AppNavbar;
+  const mapStateToProps = state => ({
+    isAuthenticated: state.reg.isAuthenticated,
+    error: state.error
+  });
+
+  export default connect(
+    mapStateToProps,
+    {logout}
+  )(AppNavbar);
+  

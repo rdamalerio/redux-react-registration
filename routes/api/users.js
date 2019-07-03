@@ -34,7 +34,7 @@
       // Check for existing user
   User.findOne({ email })
   .then(user => {
-    if(user) return res.status(400).json({ msg: 'User already exists' });
+    if(user) return res.status(400).json({ msg: 'Email '+email+' already exists' });
 
     const newUser = new User({
         fname,lname,phone,country,bday, email, pass,question,ans
@@ -80,12 +80,12 @@
     });
 
     // send mail with defined transport object
-  let info = transporter.sendMail({
-    from: 'Roel G Damalerio', // sender address
-    to: this.email, // list of receivers
-    subject: "REGISTRATION CONFIRMATION", // Subject line
-    text: "Thank you for Registering, Have a good day." // plain text body
-  });
+    let info = transporter.sendMail({
+        from: 'Roel G Damalerio', // sender address
+        to: email, // list of receivers
+        subject: "REGISTRATION CONFIRMATION", // Subject line
+        text: "Thank you for Registering, Have a good day." // plain text body
+    });
 
     //newUser.save().then(user => res.json(user))
  });
