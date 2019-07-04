@@ -73,7 +73,8 @@ export const register = ({ fname,lname,phone,country,bday,email,pass,question,an
 };
 
 // Update User
-export const update = ({ fname,lname,phone,country,bday,email,question,ans }) => dispatch => {
+export const update = ({ id,fname,lname,phone,country,bday,email,question,ans }) => dispatch => {
+
   // Headers
   const config = {
     headers: {
@@ -82,15 +83,16 @@ export const update = ({ fname,lname,phone,country,bday,email,question,ans }) =>
   };
 
   // Request body
-  const body = JSON.stringify({ fname,lname,phone,country,bday,email,question,ans });
+  const body = JSON.stringify({ id,fname,lname,phone,country,bday,email,question,ans });
   
   axios
   .post('/api/update', body, config)
   .then(res =>
     dispatch({
       type: UPDATE_SUCCESS,
-      payload: res.data
-    })   
+      payload: res.data,
+      updateStatus: true,
+    })
   )
   .catch(err => {
     try{

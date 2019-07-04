@@ -35,8 +35,12 @@ import {
                 <NavbarToggler onClick={this.toggle} />
                 <Collapse isOpen={this.state.isOpen} navbar>
                   <Nav className="ml-auto" navbar>
+                   <NavItem>
+                        {this.props.isAuthenticated ? (
+                         <NavLink href='/profile'>Profile</NavLink>
+                        ) : null}               
+                    </NavItem>
                     <NavItem>
-                        
                         {this.props.isAuthenticated ? (
                          <NavLink onClick={this.props.logout} href='/'>Logout</NavLink>
                         ) : <NavLink href='/signup'>Signup</NavLink>}

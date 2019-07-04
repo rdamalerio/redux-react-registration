@@ -37,6 +37,7 @@ mongoose.connection.on('connected', () => {
       await mongoose.connect('mongodb://localhost:27017/user', {
       useNewUrlParser:true,
       autoReconnect: true,
+      useFindAndModify: false,
       reconnectTries: 1000000,
       reconnectInterval: 3000
     })
@@ -47,7 +48,7 @@ mongoose.connection.on('connected', () => {
 //Use Routes
 app.use('/api/users',users);
 app.use('/api/auth',auth);
-app.use('/api/auth',update);
+app.use('/api/update',update);
 
 const port = process.env.PORT || 5000;
 

@@ -109,31 +109,7 @@ async function nodmailer(email){
     // Preview URL: https://ethereal.email/message/WaQKMgKddxQDoou...
   }
 
- // @route POST api/users/update
- // @desc UPDATE USER
- // @access Private
- router.post('/update',(req,res) =>{
 
-    const { _id,fname,lname,phone,country,bday, email,question,ans } = req.body;
-
-    // Simple validation
-    if(!fname || !lname  || !email) {
-        return res.status(400).json({ msg: 'Please enter all fields' });
-    }
-
-    // Check for existing and update
-    User.findOneAndUpdate({ "_id": _id }, { "$set": { "fname": fname, "lname": lname, "phone": phone, "country": country,"bday":bday,"question":question,"ans":ans}}).exec(function(err, user){
-        if(err) {
-            console.log(err);
-            res.status(500).send(err);
-        } else {
-            res.status(200).send(ser);
-        }
-    });
-
- }); 
-
- 
  // @route DELETE api/users/:id
  // @desc DELETE A user
  // @access private

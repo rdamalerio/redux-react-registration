@@ -7,12 +7,13 @@ import 'react-phone-input-2/dist/style.css'
 
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { update } from '../actions/authAction';
+import { update} from '../actions/authAction';
 import { clearErrors } from '../actions/errorActions';
 
 
 class Update extends Component {
     state = {
+        id: this.props.location.state._id,
         fname: this.props.location.state.fname,
         lname: this.props.location.state.lname,
         phone: this.props.location.state.phone,
@@ -41,8 +42,7 @@ class Update extends Component {
           } else {
             this.setState({ msg: null });
           }         
-        }
-        
+        }      
     }
 
     
@@ -64,11 +64,11 @@ class Update extends Component {
     onSubmit = e => {
         e.preventDefault();
 
-        const { fname,lname,phone,country,bday,email,pass,question,ans} = this.state;
+        const { id,fname,lname,phone,country,bday,email,pass,question,ans} = this.state;
 
         // Create user object
         const newUser = {
-            fname,lname,phone,country,bday,email,pass,question,ans
+            id,fname,lname,phone,country,bday,email,pass,question,ans
         };
         // Attempt to register
         this.props.update(newUser);
@@ -76,23 +76,22 @@ class Update extends Component {
     };
 
     
-    render() {
+    render() {  
+        
 
-        if(!this.props.isAuthenticated){       
+       if(!this.props.isAuthenticated){       
             try{
               this.props.history.push("/");  
             }catch(e){
               console.log(e);
-            }
-            
-        }
-        console.log(this.props.location.state);
-        
+            }      
+        }   
+             
         return (
             <div>
                 <Container>
-                    {this.state.msg ? (
-                    <Alert color='danger'>{this.state.msg}</Alert>
+                    {this.props.updateStatus ? (
+                    <Alert color='success'>Update Success</Alert>
                     ) : null}
                     <h2>Update profile</h2><br />
                     <Form onSubmit={this.onSubmit}>
@@ -175,6 +174,7 @@ class Update extends Component {
   const mapStateToProps = state => ({
     isRegister: state.reg.isRegister,
     isAuthenticated: state.reg.isAuthenticated,
+    updateStatus: state.reg.updateStatus,
     error: state.error
   });
 

@@ -82,8 +82,7 @@ class Login extends Component {
           this.props.history.push("/profile");  
         }catch(e){
           console.log(e);
-        }
-        
+        }      
       }
 
         return (
