@@ -38,7 +38,7 @@ import {
                    <NavItem>
                         {this.props.isAuthenticated ? (
                          <NavLink href='/profile'>Profile</NavLink>
-                        ) : null}               
+                        ) : <NavLink href='/'>Login</NavLink>}               
                     </NavItem>
                     <NavItem>
                         {this.props.isAuthenticated ? (
