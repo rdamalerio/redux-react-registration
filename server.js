@@ -5,11 +5,13 @@ const bodyParser = require('body-parser');
 const users = require('./routes/api/users');
 const auth = require('./routes/api/auth');
 const update = require('./routes/api/update');
+const image = require('./routes/api/image');
 
 const app = express();
 
 // Bodyparser Middleware
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
 
 
 //Mongoose using async/await
@@ -49,6 +51,7 @@ mongoose.connection.on('connected', () => {
 app.use('/api/users',users);
 app.use('/api/auth',auth);
 app.use('/api/update',update);
+app.use('/api/image',image);
 
 const port = process.env.PORT || 5000;
 

@@ -19,6 +19,8 @@ const initialState = {
   user: null,
   payload:null,
   updateStatus:false,
+  uploading:false,
+  image:[]
 };
 
 export default function(state = initialState, action) {
