@@ -51,7 +51,7 @@ mongoose.connection.on('connected', () => {
 app.use('/api/users',users);
 app.use('/api/auth',auth);
 app.use('/api/update',update);
-//app.use('/api/image',image);
+app.use('/api/image',image);
 
 const port = process.env.PORT || 5000;
 
